@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixabay API</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        li {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/_navbar.js') %>
+        <form id="form" style="padding: 30px;"><label class="form-label">What movie are you looking for?</label><input class="form-control"
+                type="text" id="input"><button style="margin: 20px;" class="btn btn-primary" type="submit">Search</button></form>
+        <ul id="output"></ul>
+        <script>
+            async function getimage() {
+                const value = document.querySelector("#input").value
+                const url = 'https://movies-api14.p.rapidapi.com/search?query=' + value;
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': '819089b370mshad93e3489598a9bp123b98jsn1c0f6eadbfbc',
+                        'X-RapidAPI-Host': 'movies-api14.p.rapidapi.com'
+                    }
+                };
+
+                try {
+                    
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        throw new Error("Something went wrong")
+                    }
+                    const result = response.json()
+                    result.then(res => {
+                        console.log(res)
+                        res.contents.forEach(item => {
+                            document.querySelector("#output").innerHTML += `
+                        <li>
+                        <div class="card" style="width: 18rem;">
+                            <img src="${item.backdrop_path}" class="card-img-top" alt="${item.id}">
+                            <div class="card-body">
+                                <h5 class="card-title">${item.title}</h5>
+                                <p class="card-text">${item.overview}</p>
+                                <p class="card-text">Release date: ${item.release_date}</p>
+                                <a href="${item.youtube_trailer}" class="btn btn-primary">Go</a>
+                            </div>
+                        </div>
+                        </li>
+                        `
+                        })
+                    })
+                } catch (e) { console.error(e) }
+            }
+
+            document.querySelector("#form").addEventListener("submit", (e) => {
+                e.preventDefault();
+                getimage()
+            })
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

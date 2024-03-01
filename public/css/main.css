@@ -1,0 +1,46 @@
+/* File: public/css/main.css */
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+    display: flex;
+    margin: 0;
+    flex-direction: column;
+  }
+  
+  
+  footer {
+    text-align: center;
+    margin-top: auto;
+    padding: 10px;
+    color:#acacac;
+    background: #1c1c1c;
+    width: 100%;
+  }
+
+  .item {
+    margin-top: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 50%;
+    margin: auto;
+    margin-bottom: 20px;
+  }
+
+  .carousel-inner img {
+    margin: auto; /* Center the images in the carousel */
+  }
+
+  /* Optional: Additional styling for the page and items */
+
+  h3, p {
+    text-align: center;
+  }
+
+  #page-container {
+    position: relative;
+    min-height: 100vh;
+  }

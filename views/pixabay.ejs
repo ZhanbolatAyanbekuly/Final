@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixabay API</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        li {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/_navbar.js') %>
+        <form id="form" style="padding: 30px;"><label class="form-label">What are you looking for?</label><input class="form-control"
+                type="text" id="input"><button style="margin: 20px;" class="btn btn-primary" type="submit">Search</button></form>
+        <ul id="output"></ul>
+        <script>
+            async function getimage() {
+                try {
+                    const value = document.querySelector("#input").value
+                    const result = await fetch(`https://pixabay.com/api?key=42642869-aab7bb998ec7de6b27749d3f4&q=${value}&image_type=photo`)
+                    if (!result.ok) {
+                        throw new Error("Something went wrong")
+                    }
+                    const data = result.json()
+                    data.then(res => {
+                        console.log(res)
+                        res.hits.forEach(item => {
+                            document.querySelector("#output").innerHTML += `
+                        <li>
+                        <div class="card" style="width: 18rem;">
+                            <img src="${item.webformatURL}" class="card-img-top" alt="${item.id}">
+                            <div class="card-body">
+                                <h5 class="card-title">${item.tags}</h5>
+                                <p class="card-text">${item.likes} likes</p>
+                                <a href="${item.pageURL}" class="btn btn-primary">Go</a>
+                            </div>
+                        </div>
+                        </li>
+                        `
+                        })
+                    })
+                } catch (e) { console.error(e) }
+            }
+
+            document.querySelector("#form").addEventListener("submit", (e) => {
+                e.preventDefault();
+                getimage()
+            })
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixabay API</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        li {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/_navbar.js') %>
+        <form id="form" style="padding: 30px;"><label class="form-label">What music are you looking for?</label><input class="form-control"
+                type="text" id="input"><button style="margin: 20px;" class="btn btn-primary" type="submit">Search</button></form>
+        <ul id="output"></ul>
+        <script>
+            async function getimage() {
+                const value = document.querySelector("#input").value
+                const url = `https://genius-song-lyrics1.p.rapidapi.com/search/?q=${value}&per_page=10&page=1`;
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': '819089b370mshad93e3489598a9bp123b98jsn1c0f6eadbfbc',
+                        'X-RapidAPI-Host': 'genius-song-lyrics1.p.rapidapi.com'
+                    }
+                };
+
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        throw new Error("Something went wrong")
+                    }
+                    const result = response.json()
+                    result.then(res => {
+                        console.log(res)
+                        res.hits.forEach(item => {
+                            document.querySelector("#output").innerHTML += `
+                        <li>
+                        <div class="card" style="width: 18rem;">
+                            <img src="${item.result.song_art_image_url}" class="card-img-top" alt="${item.result.id}">
+                            <div class="card-body">
+                                <h5 class="card-title">${item.result.title}</h5>
+                                <p class="card-text">Lyrics: ${item.result.url}</p>
+                                <p class="card-text">Artists: ${item.result.artist_names}</p>
+                                <button class="btn btn-primary">${item.result.release_date_for_display}</button>
+                            </div>
+                        </div>
+                        </li>
+                        `
+                        })
+                    })
+                } catch (e) { console.error(e) }
+            }
+
+            document.querySelector("#form").addEventListener("submit", (e) => {
+                e.preventDefault();
+                getimage()
+            })
+        </script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
